@@ -7,4 +7,4 @@ Name: cJSON
 Description: Ultralightweight JSON parser in ANSI C.
 Version: 1.7.18
 Cflags: -I${includedir}
-Libs: -L${libdir} -lcjson
+Libs: -lcjson
