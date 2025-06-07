@@ -73,8 +73,13 @@ Setup_SDK() {
         mkdir -p ./cache/${tc_target}
     fi
     echo "Downloading from: ${FIRM_URL}"
-    curl --progress-bar -L -C - -o "./cache/${tc_target}/firmware.bin" "${FIRM_URL}"
-
+    if command -v aria2c >/dev/null 2>&1
+    then
+        aria2c -s 16 -x 16 -k 2M "${FIRM_URL}" -o "./cache/${tc_target}/firmware.bin"
+    else
+        curl --progress-bar -L -C - -o "./cache/${tc_target}/firmware.bin" "${FIRM_URL}"
+    fi
+    
     echo "[*] Building Latest KindleTool"
     cd KindleTool/
         make
