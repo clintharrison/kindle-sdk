@@ -73,11 +73,16 @@ Setup_SDK() {
         mkdir -p ./cache/${tc_target}
     fi
     echo "Downloading from: ${FIRM_URL}"
-    if command -v aria2c >/dev/null 2>&1
-    then
-        aria2c -s 16 -x 16 -k 2M "${FIRM_URL}" -o "./cache/${tc_target}/firmware.bin"
+
+    if ! [ -f "./cache/${tc_target}/firmware.bin" ]; then
+        if command -v aria2c >/dev/null 2>&1
+        then
+            aria2c -s 16 -x 16 -k 2M "${FIRM_URL}" -o "./cache/${tc_target}/firmware.bin"
+        else
+            curl --progress-bar -L -C - -o "./cache/${tc_target}/firmware.bin" "${FIRM_URL}"
+        fi
     else
-        curl --progress-bar -L -C - -o "./cache/${tc_target}/firmware.bin" "${FIRM_URL}"
+        echo "Found firmware in cache - SKIPPING!"
     fi
     
     echo "[*] Building Latest KindleTool"
