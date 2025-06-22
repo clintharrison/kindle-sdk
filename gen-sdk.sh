@@ -184,6 +184,11 @@ Setup_SDK() {
     sudo chown -R $USER: ./cache/${tc_target}/firmware/mnt/lib/*
     cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/usr/lib/* $sysroot_dir/usr/lib/
     cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/lib/* $sysroot_dir/lib/
+    echo "[*] Patching symlinks"
+    set +e # Temporarially disable error checking because some of these will fail bc they're referencing nonexistent targets
+    find $sysroot_dir/usr/lib -type l -ls | grep "\-> /" | grep -v "\-> $sysroot_dir" | awk -v sysroot_dir="$sysroot_dir" '{print "rm " $11 "; ln -sf " $11 " " sysroot_dir $13}' | sh
+    find $sysroot_dir/lib -type l -ls | grep "\-> /" | grep -v "\-> $sysroot_dir" | awk -v sysroot_dir="$sysroot_dir" '{print "rm " $11 "; ln -sf " $11 " " sysroot_dir $13}' | sh
+    set -e
     chmod -f -R a-w $sysroot_dir/usr/lib
     chmod -f -R a-w $sysroot_dir/lib
 
