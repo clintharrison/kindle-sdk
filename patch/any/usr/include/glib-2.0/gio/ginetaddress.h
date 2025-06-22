@@ -2,12 +2,10 @@
  *
  * Copyright (C) 2008 Christian Kellner, Samuel Cormier-Iijima
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,18 +13,20 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General
- * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
  *
  * Authors: Christian Kellner <gicmo@gnome.org>
  *          Samuel Cormier-Iijima <sciyoshi@gmail.com>
  */
 
-#ifndef __G_INET_ADDRESS_H__
-#define __G_INET_ADDRESS_H__
-
 #if !defined (__GIO_GIO_H_INSIDE__) && !defined (GIO_COMPILATION)
 #error "Only <gio/gio.h> can be included directly."
 #endif
+
+#ifndef __G_INET_ADDRESS_H__
+#define __G_INET_ADDRESS_H__
 
 #include <gio/giotypes.h>
 
@@ -58,68 +58,49 @@ struct _GInetAddressClass
   const guint8 * (*to_bytes)  (GInetAddress *address);
 };
 
-GIO_AVAILABLE_IN_ALL
 GType                 g_inet_address_get_type             (void) G_GNUC_CONST;
 
-GIO_AVAILABLE_IN_ALL
 GInetAddress *        g_inet_address_new_from_string      (const gchar          *string);
 
-GIO_AVAILABLE_IN_ALL
 GInetAddress *        g_inet_address_new_from_bytes       (const guint8         *bytes,
 							   GSocketFamily         family);
 
-GIO_AVAILABLE_IN_ALL
 GInetAddress *        g_inet_address_new_loopback         (GSocketFamily         family);
 
-GIO_AVAILABLE_IN_ALL
 GInetAddress *        g_inet_address_new_any              (GSocketFamily         family);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_equal                (GInetAddress         *address,
                                                            GInetAddress         *other_address);
 
-GIO_AVAILABLE_IN_ALL
 gchar *               g_inet_address_to_string            (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 const guint8 *        g_inet_address_to_bytes             (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gsize                 g_inet_address_get_native_size      (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 GSocketFamily         g_inet_address_get_family           (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_any           (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_loopback      (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_link_local    (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_site_local    (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_multicast     (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_mc_global     (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_mc_link_local (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_mc_node_local (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_mc_org_local  (GInetAddress         *address);
 
-GIO_AVAILABLE_IN_ALL
 gboolean              g_inet_address_get_is_mc_site_local (GInetAddress         *address);
 
 G_END_DECLS
 
 #endif /* __G_INET_ADDRESS_H__ */
+
