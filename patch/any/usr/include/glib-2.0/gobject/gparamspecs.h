@@ -1,12 +1,10 @@
 /* GObject - GLib Type, Object, Parameter and Signal Library
  * Copyright (C) 1997-1999, 2000-2001 Tim Janik and Red Hat, Inc.
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,16 +12,18 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General
- * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
  *
  * gparamspecs.h: GLib default param specs
  */
-#ifndef __G_PARAMSPECS_H__
-#define __G_PARAMSPECS_H__
-
 #if !defined (__GLIB_GOBJECT_H_INSIDE__) && !defined (GOBJECT_COMPILATION)
 #error "Only <glib-object.h> can be included directly."
 #endif
+
+#ifndef __G_PARAMSPECS_H__
+#define __G_PARAMSPECS_H__
 
 #include        <gobject/gvalue.h>
 #include        <gobject/genums.h>
@@ -451,10 +451,8 @@ G_BEGIN_DECLS
  * G_TYPE_PARAM_VALUE_ARRAY:
  * 
  * The #GType of #GParamSpecValueArray.
- *
- * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
-#define	G_TYPE_PARAM_VALUE_ARRAY	   (g_param_spec_types[18]) GOBJECT_DEPRECATED_MACRO_IN_2_32
+#define	G_TYPE_PARAM_VALUE_ARRAY	   (g_param_spec_types[18])
 /**
  * G_IS_PARAM_SPEC_VALUE_ARRAY:
  * @pspec: a valid #GParamSpec instance
@@ -462,19 +460,15 @@ G_BEGIN_DECLS
  * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_VALUE_ARRAY.
  * 
  * Returns: %TRUE on success.
- *
- * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
-#define G_IS_PARAM_SPEC_VALUE_ARRAY(pspec) (G_TYPE_CHECK_INSTANCE_TYPE ((pspec), G_TYPE_PARAM_VALUE_ARRAY)) GOBJECT_DEPRECATED_MACRO_IN_2_32
+#define G_IS_PARAM_SPEC_VALUE_ARRAY(pspec) (G_TYPE_CHECK_INSTANCE_TYPE ((pspec), G_TYPE_PARAM_VALUE_ARRAY))
 /**
  * G_PARAM_SPEC_VALUE_ARRAY:
  * @pspec: a valid #GParamSpec instance
  * 
  * Cast a #GParamSpec instance into a #GParamSpecValueArray.
- *
- * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
-#define G_PARAM_SPEC_VALUE_ARRAY(pspec)    (G_TYPE_CHECK_INSTANCE_CAST ((pspec), G_TYPE_PARAM_VALUE_ARRAY, GParamSpecValueArray)) GOBJECT_DEPRECATED_MACRO_IN_2_32
+#define G_PARAM_SPEC_VALUE_ARRAY(pspec)    (G_TYPE_CHECK_INSTANCE_CAST ((pspec), G_TYPE_PARAM_VALUE_ARRAY, GParamSpecValueArray))
 
 /**
  * G_TYPE_PARAM_OBJECT:
@@ -924,15 +918,12 @@ struct _GParamSpecObject
 };
 /**
  * GParamSpecOverride:
- *
- * A #GParamSpec derived structure that redirects operations to
- * other types of #GParamSpec.
  * 
- * All operations other than getting or setting the value are redirected,
- * including accessing the nick and blurb, validating a value, and so
- * forth.
- *
- * See g_param_spec_get_redirect_target() for retrieving the overridden
+ * This is a type of #GParamSpec type that simply redirects operations to
+ * another paramspec.  All operations other than getting or
+ * setting the value are redirected, including accessing the nick and
+ * blurb, validating a value, and so forth. See
+ * g_param_spec_get_redirect_target() for retrieving the overidden
  * property. #GParamSpecOverride is used in implementing
  * g_object_class_override_property(), and will not be directly useful
  * unless you are implementing a new base type similar to GObject.
@@ -967,12 +958,6 @@ struct _GParamSpecGType
  *
  * A #GParamSpec derived structure that contains the meta data for #GVariant properties.
  *
- * When comparing values with g_param_values_cmp(), scalar values with the same
- * type will be compared with g_variant_compare(). Other non-%NULL variants will
- * be checked for equality with g_variant_equal(), and their sort order is
- * otherwise undefined. %NULL is ordered before non-%NULL variants. Two %NULL
- * values compare equal.
- *
  * Since: 2.26
  */
 struct _GParamSpecVariant
@@ -986,7 +971,6 @@ struct _GParamSpecVariant
 };
 
 /* --- GParamSpec prototypes --- */
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_char	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -994,7 +978,6 @@ GParamSpec*	g_param_spec_char	 (const gchar	 *name,
 					  gint8		  maximum,
 					  gint8		  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_uchar	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1002,13 +985,11 @@ GParamSpec*	g_param_spec_uchar	 (const gchar	 *name,
 					  guint8	  maximum,
 					  guint8	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_boolean	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  gboolean	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_int	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1016,7 +997,6 @@ GParamSpec*	g_param_spec_int	 (const gchar	 *name,
 					  gint		  maximum,
 					  gint		  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_uint	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1024,7 +1004,6 @@ GParamSpec*	g_param_spec_uint	 (const gchar	 *name,
 					  guint		  maximum,
 					  guint		  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_long	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1032,7 +1011,6 @@ GParamSpec*	g_param_spec_long	 (const gchar	 *name,
 					  glong		  maximum,
 					  glong		  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_ulong	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1040,7 +1018,6 @@ GParamSpec*	g_param_spec_ulong	 (const gchar	 *name,
 					  gulong	  maximum,
 					  gulong	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_int64	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1048,7 +1025,6 @@ GParamSpec*	g_param_spec_int64	 (const gchar	 *name,
 					  gint64       	  maximum,
 					  gint64       	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_uint64	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1056,27 +1032,23 @@ GParamSpec*	g_param_spec_uint64	 (const gchar	 *name,
 					  guint64	  maximum,
 					  guint64	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_unichar      (const gchar    *name,
 				          const gchar    *nick,
 				          const gchar    *blurb,
 				          gunichar	  default_value,
 				          GParamFlags     flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_enum	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GType		  enum_type,
 					  gint		  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_flags	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GType		  flags_type,
 					  guint		  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_float	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1084,7 +1056,6 @@ GParamSpec*	g_param_spec_float	 (const gchar	 *name,
 					  gfloat	  maximum,
 					  gfloat	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_double	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
@@ -1092,57 +1063,72 @@ GParamSpec*	g_param_spec_double	 (const gchar	 *name,
 					  gdouble	  maximum,
 					  gdouble	  default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_string	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  const gchar	 *default_value,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_param	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GType		  param_type,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_boxed	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GType		  boxed_type,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_pointer	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_value_array (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GParamSpec	 *element_spec,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_object	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GType		  object_type,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_override    (const gchar    *name,
 					  GParamSpec     *overridden);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_gtype	 (const gchar	 *name,
 					  const gchar	 *nick,
 					  const gchar	 *blurb,
 					  GType           is_a_type,
 					  GParamFlags	  flags);
-GOBJECT_AVAILABLE_IN_ALL
 GParamSpec*	g_param_spec_variant	 (const gchar        *name,
 					  const gchar        *nick,
 					  const gchar	     *blurb,
 					  const GVariantType *type,
 					  GVariant           *default_value,
 					  GParamFlags         flags);
+
+/* --- internal --- */
+/* We prefix variable declarations so they can
+ * properly get exported in windows dlls.
+ */
+#ifndef GOBJECT_VAR
+#  ifdef G_PLATFORM_WIN32
+#    ifdef GOBJECT_STATIC_COMPILATION
+#      define GOBJECT_VAR extern
+#    else /* !GOBJECT_STATIC_COMPILATION */
+#      ifdef GOBJECT_COMPILATION
+#        ifdef DLL_EXPORT
+#          define GOBJECT_VAR __declspec(dllexport)
+#        else /* !DLL_EXPORT */
+#          define GOBJECT_VAR extern
+#        endif /* !DLL_EXPORT */
+#      else /* !GOBJECT_COMPILATION */
+#        define GOBJECT_VAR extern __declspec(dllimport)
+#      endif /* !GOBJECT_COMPILATION */
+#    endif /* !GOBJECT_STATIC_COMPILATION */
+#  else /* !G_PLATFORM_WIN32 */
+#    define GOBJECT_VAR extern
+#  endif /* !G_PLATFORM_WIN32 */
+#endif /* GOBJECT_VAR */
 
 GOBJECT_VAR GType *g_param_spec_types;
 

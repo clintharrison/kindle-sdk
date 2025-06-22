@@ -24,13 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_MENU_SHELL_H__
-#define __GTK_MENU_SHELL_H__
-
-
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
+
+#ifndef __GTK_MENU_SHELL_H__
+#define __GTK_MENU_SHELL_H__
+
 
 #include <gtk/gtkcontainer.h>
 
@@ -116,6 +116,7 @@ void  gtk_menu_shell_select_first      (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
 void _gtk_menu_shell_select_last       (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
+void  _gtk_menu_shell_activate         (GtkMenuShell *menu_shell);
 gint  _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
 void  gtk_menu_shell_cancel            (GtkMenuShell *menu_shell);
 

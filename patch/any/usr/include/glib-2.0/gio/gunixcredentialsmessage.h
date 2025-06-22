@@ -3,12 +3,10 @@
  * Copyright (C) 2010 Red Hat, Inc.
  * Copyright (C) 2009 Codethink Limited
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation; either version 2 of the licence or (at
+ * your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +14,9 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General
- * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
  *
  * Authors: David Zeuthen <davidz@redhat.com>
  */
@@ -38,8 +38,6 @@ G_BEGIN_DECLS
 typedef struct _GUnixCredentialsMessagePrivate  GUnixCredentialsMessagePrivate;
 typedef struct _GUnixCredentialsMessageClass    GUnixCredentialsMessageClass;
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GUnixCredentialsMessage, g_object_unref)
-
 /**
  * GUnixCredentialsMessageClass:
  *
@@ -58,22 +56,25 @@ struct _GUnixCredentialsMessageClass
   void (*_g_reserved2) (void);
 };
 
+/**
+ * GUnixCredentialsMessage:
+ *
+ * The #GUnixCredentialsMessage structure contains only private data
+ * and should only be accessed using the provided API.
+ *
+ * Since: 2.26
+ */
 struct _GUnixCredentialsMessage
 {
   GSocketControlMessage parent_instance;
   GUnixCredentialsMessagePrivate *priv;
 };
 
-GIO_AVAILABLE_IN_ALL
 GType                  g_unix_credentials_message_get_type             (void) G_GNUC_CONST;
-GIO_AVAILABLE_IN_ALL
 GSocketControlMessage *g_unix_credentials_message_new                  (void);
-GIO_AVAILABLE_IN_ALL
 GSocketControlMessage *g_unix_credentials_message_new_with_credentials (GCredentials *credentials);
-GIO_AVAILABLE_IN_ALL
 GCredentials          *g_unix_credentials_message_get_credentials      (GUnixCredentialsMessage *message);
 
-GIO_AVAILABLE_IN_ALL
 gboolean               g_unix_credentials_message_is_supported         (void);
 
 G_END_DECLS

@@ -26,31 +26,13 @@
 
 G_BEGIN_DECLS
 
-/* All of this is deprecated and entirely useless for bindings.
- * Leave it out of the gir file.
- */
-#ifndef __GI_SCANNER__
-
-#ifndef PANGO_DISABLE_DEPRECATED
+#ifdef PANGO_ENABLE_BACKEND
 
 typedef struct _PangoMap PangoMap;
 typedef struct _PangoMapEntry PangoMapEntry;
 
 typedef struct _PangoIncludedModule PangoIncludedModule;
 
-/**
- * PangoIncludedModule:
- * @list: a function that lists the engines defined in this module.
- * @init: a function to initialize the module.
- * @exit: a function to finalize the module.
- * @create: a function to create an engine, given the engine name.
- *
- * The `PangoIncludedModule` structure for a statically linked module
- * contains the functions that would otherwise be loaded from a dynamically
- * loaded module.
- *
- * Deprecated: 1.38
- */
 struct _PangoIncludedModule
 {
   void (*list) (PangoEngineInfo **engines,
@@ -60,24 +42,18 @@ struct _PangoIncludedModule
   PangoEngine *(*create) (const char       *id);
 };
 
-PANGO_DEPRECATED_IN_1_38
 PangoMap *     pango_find_map        (PangoLanguage       *language,
 				      guint                engine_type_id,
 				      guint                render_type_id);
-PANGO_DEPRECATED_IN_1_38
 PangoEngine *  pango_map_get_engine  (PangoMap            *map,
 				      PangoScript          script);
-PANGO_DEPRECATED_IN_1_38
 void           pango_map_get_engines (PangoMap            *map,
 				      PangoScript          script,
 				      GSList             **exact_engines,
 				      GSList             **fallback_engines);
-PANGO_DEPRECATED_IN_1_38
 void           pango_module_register (PangoIncludedModule *module);
 
-#endif /* PANGO_DISABLE_DEPRECATED */
-
-#endif /* __GI_SCANNER__ */
+#endif /* PANGO_ENABLE_BACKEND */
 
 G_END_DECLS
 

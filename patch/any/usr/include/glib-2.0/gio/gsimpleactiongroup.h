@@ -1,12 +1,10 @@
 /*
  * Copyright © 2010 Codethink Limited
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation; either version 2 of the licence or (at
+ * your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,20 +12,21 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General
- * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
  *
  * Authors: Ryan Lortie <desrt@desrt.ca>
  */
-
-#ifndef __G_SIMPLE_ACTION_GROUP_H__
-#define __G_SIMPLE_ACTION_GROUP_H__
 
 #if !defined (__GIO_GIO_H_INSIDE__) && !defined (GIO_COMPILATION)
 #error "Only <gio/gio.h> can be included directly."
 #endif
 
+#ifndef __G_SIMPLE_ACTION_GROUP_H__
+#define __G_SIMPLE_ACTION_GROUP_H__
+
 #include "gactiongroup.h"
-#include "gactionmap.h"
 
 G_BEGIN_DECLS
 
@@ -46,6 +45,15 @@ G_BEGIN_DECLS
 typedef struct _GSimpleActionGroupPrivate                   GSimpleActionGroupPrivate;
 typedef struct _GSimpleActionGroupClass                     GSimpleActionGroupClass;
 
+typedef struct _GActionEntry                                GActionEntry;
+
+/**
+ * GSimpleActionGroup:
+ *
+ * The #GSimpleActionGroup structure contains private data and should only be accessed using the provided API.
+ *
+ * Since: 2.28
+ */
 struct _GSimpleActionGroup
 {
   /*< private >*/
@@ -63,25 +71,39 @@ struct _GSimpleActionGroupClass
   gpointer padding[12];
 };
 
-GIO_AVAILABLE_IN_ALL
 GType                   g_simple_action_group_get_type                  (void) G_GNUC_CONST;
 
-GIO_AVAILABLE_IN_ALL
 GSimpleActionGroup *    g_simple_action_group_new                       (void);
 
-GIO_DEPRECATED_IN_2_38_FOR (g_action_map_lookup_action)
 GAction *               g_simple_action_group_lookup                    (GSimpleActionGroup *simple,
                                                                          const gchar        *action_name);
 
-GIO_DEPRECATED_IN_2_38_FOR (g_action_map_add_action)
 void                    g_simple_action_group_insert                    (GSimpleActionGroup *simple,
                                                                          GAction            *action);
 
-GIO_DEPRECATED_IN_2_38_FOR (g_action_map_remove_action)
 void                    g_simple_action_group_remove                    (GSimpleActionGroup *simple,
                                                                          const gchar        *action_name);
 
-GIO_DEPRECATED_IN_2_38_FOR (g_action_map_add_action_entries)
+struct _GActionEntry
+{
+  const gchar *name;
+
+  void (* activate) (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data);
+
+  const gchar *parameter_type;
+
+  const gchar *state;
+
+  void (* change_state) (GSimpleAction *action,
+                         GVariant      *value,
+                         gpointer       user_data);
+
+  /*< private >*/
+  gsize padding[3];
+};
+
 void                    g_simple_action_group_add_entries               (GSimpleActionGroup *simple,
                                                                          const GActionEntry *entries,
                                                                          gint                n_entries,
