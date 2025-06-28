@@ -11,8 +11,11 @@ RM_If_Exists() {
 Setup_SDK() {
     tc_target="$1"
     sdk_target="$2"
-    FIRM_URL="$3"
-    tc_dir="$HOME/x-tools/$tc_target"
+    FIRM_URL="$3"    
+    if [[ -z $tc_dir ]]; then
+        tc_dir="$HOME/x-tools/$tc_target"
+    fi
+    
     sysroot_dir="$tc_dir/$tc_target/sysroot"
 
     # Just in case
@@ -212,18 +215,24 @@ cd $(dirname "$0")
 HELP_MSG="
 kindle-sdk - The Unofficial Kindle SDK
 
-usage: $0 PLATFORM
+usage: $0 <platform> [path]
 
 Supported platforms:
 
 	kindlepw2
 	kindlehf
+
+If used, [path] should point to your installed toolchain, ie: '~/x-tools/arm-kindlehf-linux-gnueabihf'
 "
 
 if [ $# -lt 1 ]; then
 	echo "Missing argument"
 	echo "${HELP_MSG}"
 	exit 1
+fi
+
+if [ $# -gt 1 ]; then
+    tc_dir=$2
 fi
 
 case $1 in
