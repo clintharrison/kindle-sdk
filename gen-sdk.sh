@@ -53,7 +53,6 @@ Setup_SDK() {
     echo "pkgconfig = 'pkg-config'" >> $tc_dir/meson-crosscompile.txt # Yeah ok don't give me that look
     echo "" >> $tc_dir/meson-crosscompile.txt
     echo "[built-in options]" >> $tc_dir/meson-crosscompile.txt
-    echo "pkg_config_path = '$tc_dir/$tc_target/sysroot/usr/lib/pkgconfig'" >> $tc_dir/meson-crosscompile.txt
     echo "" >> $tc_dir/meson-crosscompile.txt
     echo "[host_machine]" >> $tc_dir/meson-crosscompile.txt
     echo "system = 'linux'" >> $tc_dir/meson-crosscompile.txt
@@ -62,6 +61,7 @@ Setup_SDK() {
     echo "endian = 'little'" >> $tc_dir/meson-crosscompile.txt
     echo "" >> $tc_dir/meson-crosscompile.txt
     echo "[properties]" >> $tc_dir/meson-crosscompile.txt
+    echo "sys_root = '$tc_dir/$tc_target/sysroot'" >> $tc_dir/meson-crosscompile.txt
     echo "pkg_config_libdir = '$tc_dir/$tc_target/sysroot/usr/lib/pkgconfig'" >> $tc_dir/meson-crosscompile.txt
     echo "target='Kindle'" >> $tc_dir/meson-crosscompile.txt
     echo "arch = '$arch'" >> $tc_dir/meson-crosscompile.txt
@@ -116,7 +116,6 @@ Setup_SDK() {
     cp -r ./pkgconfig/any/* ./patch/any/usr/lib/pkgconfig/
     for filepath in ./patch/any/usr/lib/pkgconfig/*
     do
-        sed -i "s@%SYSROOT%@$sysroot_dir@g" "$filepath"
         sed -i "s@%TARGET%@$tc_target@g" "$filepath"
     done
 
@@ -127,7 +126,6 @@ Setup_SDK() {
         cp -r ./pkgconfig/$sdk_target/* ./patch/$sdk_target/usr/lib/pkgconfig/
         for filepath in ./patch/$sdk_target/usr/lib/pkgconfig/*
         do
-            sed -i "s@%SYSROOT%@$sysroot_dir@g" "$filepath"
             sed -i "s@%TARGET%@$tc_target@g" "$filepath"
         done
     fi
