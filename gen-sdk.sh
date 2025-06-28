@@ -209,7 +209,15 @@ Setup_SDK() {
     echo "===================================================================================================="
 }
 
-sudo echo # Do sudo auth beforehand in case the user leaves when we actually need it lol
+echo "========================="
+echo "= Kindle SDK Installer  ="
+echo "= Created by HackerDude ="
+echo "================ v2.0.0 ="
+echo
+echo
+
+echo "Please authenticate sudo for mounting"
+sudo echo # Do sudo auth beforehand in case the user leaves when we actually need it lol (the user's PC should download the firmware within the timeout window)
 cd $(dirname "$0")
 
 HELP_MSG="
