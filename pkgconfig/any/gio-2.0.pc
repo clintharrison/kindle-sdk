@@ -1,4 +1,4 @@
-prefix=%SYSROOT%/usr
+prefix=/usr
 bindir=${prefix}/bin
 datadir=${prefix}/share
 includedir=${prefix}/include

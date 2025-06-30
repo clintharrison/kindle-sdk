@@ -2,24 +2,22 @@
  *
  * Copyright © 2010 Collabora, Ltd.
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation; either version 2 of the licence or (at
+ * your option) any later version.
  *
  * See the included COPYING file for more information.
  *
  * Author: Stef Walter <stefw@collabora.co.uk>
  */
 
-#ifndef __G_TLS_FILE_DATABASE_H__
-#define __G_TLS_FILE_DATABASE_H__
-
 #if !defined (__GIO_GIO_H_INSIDE__) && !defined (GIO_COMPILATION)
 #error "Only <gio/gio.h> can be included directly."
 #endif
+
+#ifndef __G_TLS_FILE_DATABASE_H__
+#define __G_TLS_FILE_DATABASE_H__
 
 #include <gio/giotypes.h>
 
@@ -48,10 +46,8 @@ struct _GTlsFileDatabaseInterface
   gpointer padding[8];
 };
 
-GIO_AVAILABLE_IN_ALL
 GType                        g_tls_file_database_get_type              (void) G_GNUC_CONST;
 
-GIO_AVAILABLE_IN_ALL
 GTlsDatabase*                g_tls_file_database_new                   (const gchar  *anchors,
                                                                         GError      **error);
 

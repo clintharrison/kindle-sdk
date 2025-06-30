@@ -1,4 +1,4 @@
-prefix=%SYSROOT%/usr
+prefix=/usr
 
 Name: shared-mime-info
 Description: Freedesktop common MIME database

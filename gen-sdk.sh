@@ -12,7 +12,9 @@ Setup_SDK() {
     tc_target="$1"
     sdk_target="$2"
     FIRM_URLS=("${@:3}")
-    tc_dir="$HOME/x-tools/$tc_target"
+    if [[ -z $tc_dir ]]; then
+        tc_dir="$HOME/x-tools/$tc_target"
+
     sysroot_dir="$tc_dir/$tc_target/sysroot"
 
     # Just in case
@@ -53,7 +55,6 @@ Setup_SDK() {
     echo "pkgconfig = 'pkg-config'" >> $tc_dir/meson-crosscompile.txt # Yeah ok don't give me that look
     echo "" >> $tc_dir/meson-crosscompile.txt
     echo "[built-in options]" >> $tc_dir/meson-crosscompile.txt
-    echo "pkg_config_path = '$tc_dir/$tc_target/sysroot/usr/lib/pkgconfig'" >> $tc_dir/meson-crosscompile.txt
     echo "" >> $tc_dir/meson-crosscompile.txt
     echo "[host_machine]" >> $tc_dir/meson-crosscompile.txt
     echo "system = 'linux'" >> $tc_dir/meson-crosscompile.txt
@@ -62,6 +63,7 @@ Setup_SDK() {
     echo "endian = 'little'" >> $tc_dir/meson-crosscompile.txt
     echo "" >> $tc_dir/meson-crosscompile.txt
     echo "[properties]" >> $tc_dir/meson-crosscompile.txt
+    echo "sys_root = '$tc_dir/$tc_target/sysroot'" >> $tc_dir/meson-crosscompile.txt
     echo "pkg_config_libdir = '$tc_dir/$tc_target/sysroot/usr/lib/pkgconfig'" >> $tc_dir/meson-crosscompile.txt
     echo "target='Kindle'" >> $tc_dir/meson-crosscompile.txt
     echo "arch = '$arch'" >> $tc_dir/meson-crosscompile.txt
@@ -78,8 +80,8 @@ Setup_SDK() {
         mkdir -p ./cache/${tc_target}
     fi
 
-
     for i in "${!FIRM_URLS[@]}"; do
+      if ! [ -f "./cache/${tc_target}/firmware_${i}.bin" ]; then
         echo "Downloading from: ${FIRM_URLS[i]}"
         if command -v aria2c >/dev/null 2>&1
         then
@@ -99,6 +101,9 @@ Setup_SDK() {
             mkdir mnt
             sudo mount -o loop rootfs.img mnt
         cd ../../..
+      else
+        echo "Found firmware in cache - SKIPPING!"
+      fi
     done
 
     echo "[*] Overlaying firmwares"
@@ -127,7 +132,6 @@ Setup_SDK() {
     cp -r ./pkgconfig/any/* ./patch/any/usr/lib/pkgconfig/
     for filepath in ./patch/any/usr/lib/pkgconfig/*
     do
-        sed -i "s@%SYSROOT%@$sysroot_dir@g" "$filepath"
         sed -i "s@%TARGET%@$tc_target@g" "$filepath"
     done
 
@@ -138,7 +142,6 @@ Setup_SDK() {
         cp -r ./pkgconfig/$sdk_target/* ./patch/$sdk_target/usr/lib/pkgconfig/
         for filepath in ./patch/$sdk_target/usr/lib/pkgconfig/*
         do
-            sed -i "s@%SYSROOT%@$sysroot_dir@g" "$filepath"
             sed -i "s@%TARGET%@$tc_target@g" "$filepath"
         done
     fi
@@ -195,6 +198,11 @@ Setup_SDK() {
     cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/lib/* $sysroot_dir/lib/
     sudo chown -R $USER: ${sysroot_dir}/usr/lib/*
     sudo chown -R $USER: ${sysroot_dir}/lib/*
+    echo "[*] Patching symlinks"
+    set +e # Temporarially disable error checking because some of these will fail bc they're referencing nonexistent targets
+    find $sysroot_dir/usr/lib -type l -ls | grep "\-> /" | grep -v "\-> $sysroot_dir" | awk -v sysroot_dir="$sysroot_dir" '{print "rm " $11 "; ln -sf " sysroot_dir $13 " " $11}' | sh
+    find $sysroot_dir/lib -type l -ls | grep "\-> /" | grep -v "\-> $sysroot_dir" | awk -v sysroot_dir="$sysroot_dir" '{print "rm " $11 "; ln -sf " sysroot_dir $13 " " $11}' | sh
+    set -e
     chmod -f -R a-w $sysroot_dir/usr/lib
     chmod -f -R a-w $sysroot_dir/lib
 
@@ -212,24 +220,38 @@ Setup_SDK() {
     echo "===================================================================================================="
 }
 
-sudo echo # Do sudo auth beforehand in case the user leaves when we actually need it lol
+echo "========================="
+echo "= Kindle SDK Installer  ="
+echo "= Created by HackerDude ="
+echo "================ v2.0.0 ="
+echo
+echo
+
+echo "Please authenticate sudo for mounting"
+sudo echo # Do sudo auth beforehand in case the user leaves when we actually need it lol (the user's PC should download the firmware within the timeout window)
 cd $(dirname "$0")
 
 HELP_MSG="
 kindle-sdk - The Unofficial Kindle SDK
 
-usage: $0 PLATFORM
+usage: $0 <platform> [path]
 
 Supported platforms:
 
 	kindlepw2
 	kindlehf
+
+If used, [path] should point to your installed toolchain, ie: '~/x-tools/arm-kindlehf-linux-gnueabihf'
 "
 
 if [ $# -lt 1 ]; then
 	echo "Missing argument"
 	echo "${HELP_MSG}"
 	exit 1
+fi
+
+if [ $# -gt 1 ]; then
+    tc_dir=$2
 fi
 
 case $1 in

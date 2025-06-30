@@ -2,12 +2,10 @@
  *
  * Copyright (C) 2010 Collabora, Ltd.
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,17 +13,19 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General
- * Public License along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * Public License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+ * Boston, MA 02111-1307, USA.
  *
  * Authors: Nicolas Dufresne <nicolas.dufresne@collabora.co.uk>
  */
 
-#ifndef __G_PROXY_ADDRESS_H__
-#define __G_PROXY_ADDRESS_H__
-
 #if !defined (__GIO_GIO_H_INSIDE__) && !defined (GIO_COMPILATION)
 #error "Only <gio/gio.h> can be included directly."
 #endif
+
+#ifndef __G_PROXY_ADDRESS_H__
+#define __G_PROXY_ADDRESS_H__
 
 #include <gio/ginetsocketaddress.h>
 
@@ -55,10 +55,8 @@ struct _GProxyAddressClass
 };
 
 
-GIO_AVAILABLE_IN_ALL
 GType           g_proxy_address_get_type    (void) G_GNUC_CONST;
 
-GIO_AVAILABLE_IN_ALL
 GSocketAddress *g_proxy_address_new         (GInetAddress *inetaddr,
 					     guint16       port,
 					     const gchar  *protocol,
@@ -67,21 +65,11 @@ GSocketAddress *g_proxy_address_new         (GInetAddress *inetaddr,
 					     const gchar  *username,
 					     const gchar  *password);
 
-GIO_AVAILABLE_IN_ALL
 const gchar    *g_proxy_address_get_protocol                (GProxyAddress *proxy);
-GIO_AVAILABLE_IN_2_34
-const gchar    *g_proxy_address_get_destination_protocol    (GProxyAddress *proxy);
-GIO_AVAILABLE_IN_ALL
 const gchar    *g_proxy_address_get_destination_hostname    (GProxyAddress *proxy);
-GIO_AVAILABLE_IN_ALL
 guint16         g_proxy_address_get_destination_port        (GProxyAddress *proxy);
-GIO_AVAILABLE_IN_ALL
 const gchar    *g_proxy_address_get_username                (GProxyAddress *proxy);
-GIO_AVAILABLE_IN_ALL
 const gchar    *g_proxy_address_get_password                (GProxyAddress *proxy);
-
-GIO_AVAILABLE_IN_2_34
-const gchar    *g_proxy_address_get_uri                     (GProxyAddress *proxy);
 
 G_END_DECLS
 

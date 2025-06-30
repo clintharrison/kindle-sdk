@@ -1,7 +1,7 @@
-prefix=%SYSROOT%/usr
-exec_prefix=%SYSROOT%/usr
-libdir=%SYSROOT%/usr/lib
-includedir=%SYSROOT%/usr/include
+prefix=/usr
+exec_prefix=/usr
+libdir=/usr/lib
+includedir=/usr/include
 
 Name: libjpeg
 Description: A SIMD-accelerated JPEG codec that provides the libjpeg API

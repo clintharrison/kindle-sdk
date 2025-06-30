@@ -1,4 +1,4 @@
-prefix=%SYSROOT%/usr
+prefix=/usr
 includedir=${prefix}/include
  
 Name: KBProto

@@ -28,13 +28,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GTK_ENTRY_H__
-#define __GTK_ENTRY_H__
-
-
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
+
+#ifndef __GTK_ENTRY_H__
+#define __GTK_ENTRY_H__
+
 
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkimcontext.h>
@@ -188,7 +188,7 @@ gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 
 void       gtk_entry_set_inner_border                (GtkEntry        *entry,
                                                       const GtkBorder *border);
-const GtkBorder* gtk_entry_get_inner_border          (GtkEntry        *entry);
+G_CONST_RETURN GtkBorder* gtk_entry_get_inner_border (GtkEntry        *entry);
 
 void       gtk_entry_set_overwrite_mode         (GtkEntry      *entry,
                                                  gboolean       overwrite);
@@ -213,7 +213,7 @@ gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 void       gtk_entry_set_text                   (GtkEntry      *entry,
                                                  const gchar   *text);
 /* returns a reference to the text */
-const gchar* gtk_entry_get_text                 (GtkEntry      *entry);
+G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
 
 PangoLayout* gtk_entry_get_layout               (GtkEntry      *entry);
 void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,
@@ -305,10 +305,6 @@ gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *
 
 GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos);
-
-gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *entry,
-                                                          GdkEventKey          *event);
-void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
 
 
 /* Deprecated compatibility functions

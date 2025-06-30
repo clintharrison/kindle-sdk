@@ -38,18 +38,17 @@ typedef struct _PangoMatrix    PangoMatrix;
  * @x0: x translation
  * @y0: y translation
  *
- * A `PangoMatrix` specifies a transformation between user-space
- * and device coordinates.
+ * A structure specifying a transformation between user-space
+ * coordinates and device coordinates. The transformation
+ * is given by
  *
- * The transformation is given by
- *
- * ```
+ * <programlisting>
  * x_device = x_user * matrix->xx + y_user * matrix->xy + matrix->x0;
  * y_device = x_user * matrix->yx + y_user * matrix->yy + matrix->y0;
- * ```
+ * </programlisting>
  *
  * Since: 1.6
- */
+ **/
 struct _PangoMatrix
 {
   double xx;
@@ -60,18 +59,23 @@ struct _PangoMatrix
   double y0;
 };
 
+/**
+ * PANGO_TYPE_MATRIX
+ *
+ * The GObject type for #PangoMatrix
+ **/
 #define PANGO_TYPE_MATRIX (pango_matrix_get_type ())
 
 /**
- * PANGO_MATRIX_INIT:
+ * PANGO_MATRIX_INIT
  *
- * Constant that can be used to initialize a `PangoMatrix` to
+ * Constant that can be used to initialize a PangoMatrix to
  * the identity transform.
  *
- * ```
+ * <informalexample><programlisting>
  * PangoMatrix matrix = PANGO_MATRIX_INIT;
- * pango_matrix_rotate (&matrix, 45.);
- * ```
+ * pango_matrix_rotate (&amp;matrix, 45.);
+ * </programlisting></informalexample>
  *
  * Since: 1.6
  **/
@@ -80,49 +84,32 @@ struct _PangoMatrix
 /* for PangoRectangle */
 #include <pango/pango-types.h>
 
-PANGO_AVAILABLE_IN_1_6
 GType pango_matrix_get_type (void) G_GNUC_CONST;
 
-PANGO_AVAILABLE_IN_1_6
 PangoMatrix *pango_matrix_copy   (const PangoMatrix *matrix);
-PANGO_AVAILABLE_IN_1_6
 void         pango_matrix_free   (PangoMatrix *matrix);
 
-PANGO_AVAILABLE_IN_1_6
 void pango_matrix_translate (PangoMatrix *matrix,
 			     double       tx,
 			     double       ty);
-PANGO_AVAILABLE_IN_1_6
 void pango_matrix_scale     (PangoMatrix *matrix,
 			     double       scale_x,
 			     double       scale_y);
-PANGO_AVAILABLE_IN_1_6
 void pango_matrix_rotate    (PangoMatrix *matrix,
 			     double       degrees);
-PANGO_AVAILABLE_IN_1_6
 void pango_matrix_concat    (PangoMatrix       *matrix,
 			     const PangoMatrix *new_matrix);
-PANGO_AVAILABLE_IN_1_16
 void pango_matrix_transform_point    (const PangoMatrix *matrix,
 				      double            *x,
 				      double            *y);
-PANGO_AVAILABLE_IN_1_16
 void pango_matrix_transform_distance (const PangoMatrix *matrix,
 				      double            *dx,
 				      double            *dy);
-PANGO_AVAILABLE_IN_1_16
 void pango_matrix_transform_rectangle (const PangoMatrix *matrix,
 				       PangoRectangle    *rect);
-PANGO_AVAILABLE_IN_1_16
 void pango_matrix_transform_pixel_rectangle (const PangoMatrix *matrix,
 					     PangoRectangle    *rect);
-PANGO_AVAILABLE_IN_1_12
 double pango_matrix_get_font_scale_factor (const PangoMatrix *matrix) G_GNUC_PURE;
-PANGO_AVAILABLE_IN_1_38
-void pango_matrix_get_font_scale_factors (const PangoMatrix *matrix,
-					  double *xscale, double *yscale);
-PANGO_AVAILABLE_IN_1_50
-double pango_matrix_get_slant_ratio (const PangoMatrix *matrix) G_GNUC_PURE;
 
 
 G_END_DECLS

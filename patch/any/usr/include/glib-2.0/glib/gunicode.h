@@ -3,28 +3,28 @@
  *  Copyright (C) 1999, 2000 Tom Tromey
  *  Copyright 2000, 2005 Red Hat, Inc.
  *
- * SPDX-License-Identifier: LGPL-2.1-or-later
+ * The Gnome Library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
+ * The Gnome Library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library; if not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with the Gnome Library; see the file COPYING.LIB.  If not,
+ * write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *   Boston, MA 02111-1307, USA.
  */
+
+#if defined(G_DISABLE_SINGLE_INCLUDES) && !defined (__GLIB_H_INSIDE__) && !defined (GLIB_COMPILATION)
+#error "Only <glib.h> can be included directly."
+#endif
 
 #ifndef __G_UNICODE_H__
 #define __G_UNICODE_H__
-
-#if !defined (__GLIB_H_INSIDE__) && !defined (GLIB_COMPILATION)
-#error "Only <glib.h> can be included directly."
-#endif
 
 #include <glib/gerror.h>
 #include <glib/gtypes.h>
@@ -49,8 +49,8 @@ G_BEGIN_DECLS
  * letters, prefixed by the string "U+". Leading zeros are omitted,
  * unless the code point would have fewer than four hexadecimal digits.
  * For example, "U+0041 LATIN CAPITAL LETTER A". To print a code point
- * in the U+-notation, use the format string "U+\%04"G_GINT32_FORMAT"X".
- * To scan, use the format string "U+\%06"G_GINT32_FORMAT"X".
+ * in the U+-notation, use the format string "U+%04"G_GINT32_FORMAT"X".
+ * To scan, use the format string "U+%06"G_GINT32_FORMAT"X".
  *
  * |[
  * gunichar c;
@@ -113,7 +113,7 @@ typedef guint16 gunichar2;
  *
  * These are the possible character classifications from the
  * Unicode specification.
- * See [Unicode Character Database](http://www.unicode.org/reports/tr44/#General_Category_Values).
+ * See <ulink url="http://www.unicode.org/Public/UNIDATA/UnicodeData.html">http://www.unicode.org/Public/UNIDATA/UnicodeData.html</ulink>.
  */
 typedef enum
 {
@@ -156,7 +156,9 @@ typedef enum
  *
  * Deprecated: 2.30: Use %G_UNICODE_SPACING_MARK.
  */
-#define G_UNICODE_COMBINING_MARK G_UNICODE_SPACING_MARK GLIB_DEPRECATED_MACRO_IN_2_30_FOR(G_UNICODE_SPACING_MARK)
+#ifndef G_DISABLE_DEPRECATED
+#define G_UNICODE_COMBINING_MARK G_UNICODE_SPACING_MARK
+#endif
 
 /**
  * GUnicodeBreakType:
@@ -196,26 +198,16 @@ typedef enum
  * @G_UNICODE_BREAK_HANGUL_T_JAMO: Hangul T Jamo (JT)
  * @G_UNICODE_BREAK_HANGUL_LV_SYLLABLE: Hangul LV Syllable (H2)
  * @G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE: Hangul LVT Syllable (H3)
- * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28. Deprecated: 2.70: Use %G_UNICODE_BREAK_CLOSE_PARENTHESIS instead.
- * @G_UNICODE_BREAK_CLOSE_PARENTHESIS: Closing Parenthesis (CP). Since 2.70
- * @G_UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER: Conditional Japanese Starter (CJ). Since: 2.32
- * @G_UNICODE_BREAK_HEBREW_LETTER: Hebrew Letter (HL). Since: 2.32
- * @G_UNICODE_BREAK_REGIONAL_INDICATOR: Regional Indicator (RI). Since: 2.36
- * @G_UNICODE_BREAK_EMOJI_BASE: Emoji Base (EB). Since: 2.50
- * @G_UNICODE_BREAK_EMOJI_MODIFIER: Emoji Modifier (EM). Since: 2.50
- * @G_UNICODE_BREAK_ZERO_WIDTH_JOINER: Zero Width Joiner (ZWJ). Since: 2.50
- * @G_UNICODE_BREAK_AKSARA: Aksara (AK). Since: 2.80
- * @G_UNICODE_BREAK_AKSARA_PRE_BASE (AP). Since: 2.80
- * @G_UNICODE_BREAK_AKSARA_START (AS). Since: 2.80
- * @G_UNICODE_BREAK_VIRAMA_FINAL (VF). Since: 2.80
- * @G_UNICODE_BREAK_VIRAMA (VI). Since: 2.80
+ * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
  *
  * These are the possible line break classifications.
  *
- * Since new Unicode versions may add new types here, applications should be ready
- * to handle unknown values. They may be regarded as %G_UNICODE_BREAK_UNKNOWN.
+ * The five Hangul types were added in Unicode 4.1, so, has been
+ * introduced in GLib 2.10. Note that new types may be added in the future.
+ * Applications should be ready to handle unknown values.
+ * They may be regarded as %G_UNICODE_BREAK_UNKNOWN.
  *
- * See [Unicode Line Breaking Algorithm](https://www.unicode.org/reports/tr14/).
+ * See <ulink url="http://www.unicode.org/unicode/reports/tr14/">http://www.unicode.org/unicode/reports/tr14/</ulink>.
  */
 typedef enum
 {
@@ -255,19 +247,7 @@ typedef enum
   G_UNICODE_BREAK_HANGUL_T_JAMO,
   G_UNICODE_BREAK_HANGUL_LV_SYLLABLE,
   G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE,
-  G_UNICODE_BREAK_CLOSE_PARANTHESIS,
-  G_UNICODE_BREAK_CLOSE_PARENTHESIS GLIB_AVAILABLE_ENUMERATOR_IN_2_70 = G_UNICODE_BREAK_CLOSE_PARANTHESIS,
-  G_UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER,
-  G_UNICODE_BREAK_HEBREW_LETTER,
-  G_UNICODE_BREAK_REGIONAL_INDICATOR,
-  G_UNICODE_BREAK_EMOJI_BASE,
-  G_UNICODE_BREAK_EMOJI_MODIFIER,
-  G_UNICODE_BREAK_ZERO_WIDTH_JOINER,
-  G_UNICODE_BREAK_AKSARA,
-  G_UNICODE_BREAK_AKSARA_PRE_BASE,
-  G_UNICODE_BREAK_AKSARA_START,
-  G_UNICODE_BREAK_VIRAMA_FINAL,
-  G_UNICODE_BREAK_VIRAMA
+  G_UNICODE_BREAK_CLOSE_PARANTHESIS
 } GUnicodeBreakType;
 
 /**
@@ -276,7 +256,7 @@ typedef enum
  *                               a value never returned from g_unichar_get_script()
  * @G_UNICODE_SCRIPT_COMMON:     a character used by multiple different scripts
  * @G_UNICODE_SCRIPT_INHERITED:  a mark glyph that takes its script from the
- *                               base glyph to which it is attached
+ * i                             base glyph to which it is attached
  * @G_UNICODE_SCRIPT_ARABIC:     Arabic
  * @G_UNICODE_SCRIPT_ARMENIAN:   Armenian
  * @G_UNICODE_SCRIPT_BENGALI:    Bengali
@@ -381,75 +361,6 @@ typedef enum
  * @G_UNICODE_SCRIPT_BATAK:      Batak. Since 2.28
  * @G_UNICODE_SCRIPT_BRAHMI:     Brahmi. Since 2.28
  * @G_UNICODE_SCRIPT_MANDAIC:    Mandaic. Since 2.28
- * @G_UNICODE_SCRIPT_CHAKMA:               Chakma. Since: 2.32
- * @G_UNICODE_SCRIPT_MEROITIC_CURSIVE:     Meroitic Cursive. Since: 2.32
- * @G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS: Meroitic Hieroglyphs. Since: 2.32
- * @G_UNICODE_SCRIPT_MIAO:                 Miao. Since: 2.32
- * @G_UNICODE_SCRIPT_SHARADA:              Sharada. Since: 2.32
- * @G_UNICODE_SCRIPT_SORA_SOMPENG:         Sora Sompeng. Since: 2.32
- * @G_UNICODE_SCRIPT_TAKRI:                Takri. Since: 2.32
- * @G_UNICODE_SCRIPT_BASSA_VAH:            Bassa. Since: 2.42
- * @G_UNICODE_SCRIPT_CAUCASIAN_ALBANIAN:   Caucasian Albanian. Since: 2.42
- * @G_UNICODE_SCRIPT_DUPLOYAN:             Duployan. Since: 2.42
- * @G_UNICODE_SCRIPT_ELBASAN:              Elbasan. Since: 2.42
- * @G_UNICODE_SCRIPT_GRANTHA:              Grantha. Since: 2.42
- * @G_UNICODE_SCRIPT_KHOJKI:               Kjohki. Since: 2.42
- * @G_UNICODE_SCRIPT_KHUDAWADI:            Khudawadi, Sindhi. Since: 2.42
- * @G_UNICODE_SCRIPT_LINEAR_A:             Linear A. Since: 2.42
- * @G_UNICODE_SCRIPT_MAHAJANI:             Mahajani. Since: 2.42
- * @G_UNICODE_SCRIPT_MANICHAEAN:           Manichaean. Since: 2.42
- * @G_UNICODE_SCRIPT_MENDE_KIKAKUI:        Mende Kikakui. Since: 2.42
- * @G_UNICODE_SCRIPT_MODI:                 Modi. Since: 2.42
- * @G_UNICODE_SCRIPT_MRO:                  Mro. Since: 2.42
- * @G_UNICODE_SCRIPT_NABATAEAN:            Nabataean. Since: 2.42
- * @G_UNICODE_SCRIPT_OLD_NORTH_ARABIAN:    Old North Arabian. Since: 2.42
- * @G_UNICODE_SCRIPT_OLD_PERMIC:           Old Permic. Since: 2.42
- * @G_UNICODE_SCRIPT_PAHAWH_HMONG:         Pahawh Hmong. Since: 2.42
- * @G_UNICODE_SCRIPT_PALMYRENE:            Palmyrene. Since: 2.42
- * @G_UNICODE_SCRIPT_PAU_CIN_HAU:          Pau Cin Hau. Since: 2.42
- * @G_UNICODE_SCRIPT_PSALTER_PAHLAVI:      Psalter Pahlavi. Since: 2.42
- * @G_UNICODE_SCRIPT_SIDDHAM:              Siddham. Since: 2.42
- * @G_UNICODE_SCRIPT_TIRHUTA:              Tirhuta. Since: 2.42
- * @G_UNICODE_SCRIPT_WARANG_CITI:          Warang Citi. Since: 2.42
- * @G_UNICODE_SCRIPT_AHOM:                 Ahom. Since: 2.48
- * @G_UNICODE_SCRIPT_ANATOLIAN_HIEROGLYPHS: Anatolian Hieroglyphs. Since: 2.48
- * @G_UNICODE_SCRIPT_HATRAN:               Hatran. Since: 2.48
- * @G_UNICODE_SCRIPT_MULTANI:              Multani. Since: 2.48
- * @G_UNICODE_SCRIPT_OLD_HUNGARIAN:        Old Hungarian. Since: 2.48
- * @G_UNICODE_SCRIPT_SIGNWRITING:          Signwriting. Since: 2.48
- * @G_UNICODE_SCRIPT_ADLAM:                Adlam. Since: 2.50
- * @G_UNICODE_SCRIPT_BHAIKSUKI:            Bhaiksuki. Since: 2.50
- * @G_UNICODE_SCRIPT_MARCHEN:              Marchen. Since: 2.50
- * @G_UNICODE_SCRIPT_NEWA:                 Newa. Since: 2.50
- * @G_UNICODE_SCRIPT_OSAGE:                Osage. Since: 2.50
- * @G_UNICODE_SCRIPT_TANGUT:               Tangut. Since: 2.50
- * @G_UNICODE_SCRIPT_MASARAM_GONDI:        Masaram Gondi. Since: 2.54
- * @G_UNICODE_SCRIPT_NUSHU:                Nushu. Since: 2.54
- * @G_UNICODE_SCRIPT_SOYOMBO:              Soyombo. Since: 2.54
- * @G_UNICODE_SCRIPT_ZANABAZAR_SQUARE:     Zanabazar Square. Since: 2.54
- * @G_UNICODE_SCRIPT_DOGRA:                Dogra. Since: 2.58
- * @G_UNICODE_SCRIPT_GUNJALA_GONDI:        Gunjala Gondi. Since: 2.58
- * @G_UNICODE_SCRIPT_HANIFI_ROHINGYA:      Hanifi Rohingya. Since: 2.58
- * @G_UNICODE_SCRIPT_MAKASAR:              Makasar. Since: 2.58
- * @G_UNICODE_SCRIPT_MEDEFAIDRIN:          Medefaidrin. Since: 2.58
- * @G_UNICODE_SCRIPT_OLD_SOGDIAN:          Old Sogdian. Since: 2.58
- * @G_UNICODE_SCRIPT_SOGDIAN:              Sogdian. Since: 2.58
- * @G_UNICODE_SCRIPT_ELYMAIC:              Elym. Since: 2.62
- * @G_UNICODE_SCRIPT_NANDINAGARI:          Nand. Since: 2.62
- * @G_UNICODE_SCRIPT_NYIAKENG_PUACHUE_HMONG: Rohg. Since: 2.62
- * @G_UNICODE_SCRIPT_WANCHO:               Wcho. Since: 2.62
- * @G_UNICODE_SCRIPT_CHORASMIAN:           Chorasmian. Since: 2.66
- * @G_UNICODE_SCRIPT_DIVES_AKURU:          Dives Akuru. Since: 2.66
- * @G_UNICODE_SCRIPT_KHITAN_SMALL_SCRIPT:  Khitan small script. Since: 2.66
- * @G_UNICODE_SCRIPT_YEZIDI:               Yezidi. Since: 2.66
- * @G_UNICODE_SCRIPT_CYPRO_MINOAN:         Cypro-Minoan. Since: 2.72
- * @G_UNICODE_SCRIPT_OLD_UYGHUR:           Old Uyghur. Since: 2.72
- * @G_UNICODE_SCRIPT_TANGSA:               Tangsa. Since: 2.72
- * @G_UNICODE_SCRIPT_TOTO:                 Toto. Since: 2.72
- * @G_UNICODE_SCRIPT_VITHKUQI:             Vithkuqi. Since: 2.72
- * @G_UNICODE_SCRIPT_MATH:                 Mathematical notation. Since: 2.72
- * @G_UNICODE_SCRIPT_KAWI:                 Kawi. Since 2.74
- * @G_UNICODE_SCRIPT_NAG_MUNDARI:          Nag Mundari. Since 2.74
  *
  * The #GUnicodeScript enumeration identifies different writing
  * systems. The values correspond to the names as defined in the
@@ -458,19 +369,21 @@ typedef enum
  *
  * Note that new types may be added in the future. Applications
  * should be ready to handle unknown values.
- * See [Unicode Standard Annex #24: Script names](http://www.unicode.org/reports/tr24/).
+ * See <ulink
+ * url="http://www.unicode.org/reports/tr24/">Unicode Standard Annex
+ * #24: Script names</ulink>.
  */
 typedef enum
 {                         /* ISO 15924 code */
   G_UNICODE_SCRIPT_INVALID_CODE = -1,
   G_UNICODE_SCRIPT_COMMON       = 0,   /* Zyyy */
-  G_UNICODE_SCRIPT_INHERITED,          /* Zinh (Qaai) */
+  G_UNICODE_SCRIPT_INHERITED,          /* Qaai */
   G_UNICODE_SCRIPT_ARABIC,             /* Arab */
   G_UNICODE_SCRIPT_ARMENIAN,           /* Armn */
   G_UNICODE_SCRIPT_BENGALI,            /* Beng */
   G_UNICODE_SCRIPT_BOPOMOFO,           /* Bopo */
   G_UNICODE_SCRIPT_CHEROKEE,           /* Cher */
-  G_UNICODE_SCRIPT_COPTIC,             /* Copt (Qaac) */
+  G_UNICODE_SCRIPT_COPTIC,             /* Qaac */
   G_UNICODE_SCRIPT_CYRILLIC,           /* Cyrl (Cyrs) */
   G_UNICODE_SCRIPT_DESERET,            /* Dsrt */
   G_UNICODE_SCRIPT_DEVANAGARI,         /* Deva */
@@ -570,221 +483,94 @@ typedef enum
   /* Unicode-6.0 additions */
   G_UNICODE_SCRIPT_BATAK,                  /* Batk */
   G_UNICODE_SCRIPT_BRAHMI,                 /* Brah */
-  G_UNICODE_SCRIPT_MANDAIC,                /* Mand */
-
-  /* Unicode-6.1 additions */
-  G_UNICODE_SCRIPT_CHAKMA,                 /* Cakm */
-  G_UNICODE_SCRIPT_MEROITIC_CURSIVE,       /* Merc */
-  G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS,   /* Mero */
-  G_UNICODE_SCRIPT_MIAO,                   /* Plrd */
-  G_UNICODE_SCRIPT_SHARADA,                /* Shrd */
-  G_UNICODE_SCRIPT_SORA_SOMPENG,           /* Sora */
-  G_UNICODE_SCRIPT_TAKRI,                  /* Takr */
-
-  /* Unicode 7.0 additions */
-  G_UNICODE_SCRIPT_BASSA_VAH,              /* Bass */
-  G_UNICODE_SCRIPT_CAUCASIAN_ALBANIAN,     /* Aghb */
-  G_UNICODE_SCRIPT_DUPLOYAN,               /* Dupl */
-  G_UNICODE_SCRIPT_ELBASAN,                /* Elba */
-  G_UNICODE_SCRIPT_GRANTHA,                /* Gran */
-  G_UNICODE_SCRIPT_KHOJKI,                 /* Khoj */
-  G_UNICODE_SCRIPT_KHUDAWADI,              /* Sind */
-  G_UNICODE_SCRIPT_LINEAR_A,               /* Lina */
-  G_UNICODE_SCRIPT_MAHAJANI,               /* Mahj */
-  G_UNICODE_SCRIPT_MANICHAEAN,             /* Mani */
-  G_UNICODE_SCRIPT_MENDE_KIKAKUI,          /* Mend */
-  G_UNICODE_SCRIPT_MODI,                   /* Modi */
-  G_UNICODE_SCRIPT_MRO,                    /* Mroo */
-  G_UNICODE_SCRIPT_NABATAEAN,              /* Nbat */
-  G_UNICODE_SCRIPT_OLD_NORTH_ARABIAN,      /* Narb */
-  G_UNICODE_SCRIPT_OLD_PERMIC,             /* Perm */
-  G_UNICODE_SCRIPT_PAHAWH_HMONG,           /* Hmng */
-  G_UNICODE_SCRIPT_PALMYRENE,              /* Palm */
-  G_UNICODE_SCRIPT_PAU_CIN_HAU,            /* Pauc */
-  G_UNICODE_SCRIPT_PSALTER_PAHLAVI,        /* Phlp */
-  G_UNICODE_SCRIPT_SIDDHAM,                /* Sidd */
-  G_UNICODE_SCRIPT_TIRHUTA,                /* Tirh */
-  G_UNICODE_SCRIPT_WARANG_CITI,            /* Wara */
-
-  /* Unicode 8.0 additions */
-  G_UNICODE_SCRIPT_AHOM,                   /* Ahom */
-  G_UNICODE_SCRIPT_ANATOLIAN_HIEROGLYPHS,  /* Hluw */
-  G_UNICODE_SCRIPT_HATRAN,                 /* Hatr */
-  G_UNICODE_SCRIPT_MULTANI,                /* Mult */
-  G_UNICODE_SCRIPT_OLD_HUNGARIAN,          /* Hung */
-  G_UNICODE_SCRIPT_SIGNWRITING,            /* Sgnw */
-
-  /* Unicode 9.0 additions */
-  G_UNICODE_SCRIPT_ADLAM,                  /* Adlm */
-  G_UNICODE_SCRIPT_BHAIKSUKI,              /* Bhks */
-  G_UNICODE_SCRIPT_MARCHEN,                /* Marc */
-  G_UNICODE_SCRIPT_NEWA,                   /* Newa */
-  G_UNICODE_SCRIPT_OSAGE,                  /* Osge */
-  G_UNICODE_SCRIPT_TANGUT,                 /* Tang */
-
-  /* Unicode 10.0 additions */
-  G_UNICODE_SCRIPT_MASARAM_GONDI,          /* Gonm */
-  G_UNICODE_SCRIPT_NUSHU,                  /* Nshu */
-  G_UNICODE_SCRIPT_SOYOMBO,                /* Soyo */
-  G_UNICODE_SCRIPT_ZANABAZAR_SQUARE,       /* Zanb */
-
-  /* Unicode 11.0 additions */
-  G_UNICODE_SCRIPT_DOGRA,                  /* Dogr */
-  G_UNICODE_SCRIPT_GUNJALA_GONDI,          /* Gong */
-  G_UNICODE_SCRIPT_HANIFI_ROHINGYA,        /* Rohg */
-  G_UNICODE_SCRIPT_MAKASAR,                /* Maka */
-  G_UNICODE_SCRIPT_MEDEFAIDRIN,            /* Medf */
-  G_UNICODE_SCRIPT_OLD_SOGDIAN,            /* Sogo */
-  G_UNICODE_SCRIPT_SOGDIAN,                /* Sogd */
-
-  /* Unicode 12.0 additions */
-  G_UNICODE_SCRIPT_ELYMAIC,                /* Elym */
-  G_UNICODE_SCRIPT_NANDINAGARI,            /* Nand */
-  G_UNICODE_SCRIPT_NYIAKENG_PUACHUE_HMONG, /* Rohg */
-  G_UNICODE_SCRIPT_WANCHO,                 /* Wcho */
-
-  /* Unicode 13.0 additions */
-  G_UNICODE_SCRIPT_CHORASMIAN,             /* Chrs */
-  G_UNICODE_SCRIPT_DIVES_AKURU,            /* Diak */
-  G_UNICODE_SCRIPT_KHITAN_SMALL_SCRIPT,    /* Kits */
-  G_UNICODE_SCRIPT_YEZIDI,                 /* Yezi */
-
-  /* Unicode 14.0 additions */
-  G_UNICODE_SCRIPT_CYPRO_MINOAN,           /* Cpmn */
-  G_UNICODE_SCRIPT_OLD_UYGHUR,             /* Ougr */
-  G_UNICODE_SCRIPT_TANGSA,                 /* Tnsa */
-  G_UNICODE_SCRIPT_TOTO,                   /* Toto */
-  G_UNICODE_SCRIPT_VITHKUQI,               /* Vith */
-
-  /* not really a Unicode script, but part of ISO 15924 */
-  G_UNICODE_SCRIPT_MATH,                   /* Zmth */
-
-  /* Unicode 15.0 additions */
-  G_UNICODE_SCRIPT_KAWI GLIB_AVAILABLE_ENUMERATOR_IN_2_74,          /* Kawi */
-  G_UNICODE_SCRIPT_NAG_MUNDARI GLIB_AVAILABLE_ENUMERATOR_IN_2_74,   /* Nag Mundari */
+  G_UNICODE_SCRIPT_MANDAIC                 /* Mand */
 } GUnicodeScript;
 
-GLIB_AVAILABLE_IN_ALL
-guint32        g_unicode_script_to_iso15924   (GUnicodeScript script);
-GLIB_AVAILABLE_IN_ALL
-GUnicodeScript g_unicode_script_from_iso15924 (guint32        iso15924);
+guint32 g_unicode_script_to_iso15924 (GUnicodeScript script);
+GUnicodeScript g_unicode_script_from_iso15924 (guint32 iso15924);
+
+/* Returns TRUE if current locale uses UTF-8 charset.  If CHARSET is
+ * not null, sets *CHARSET to the name of the current locale's
+ * charset.  This value is statically allocated, and should be copied
+ * in case the locale's charset will be changed later using setlocale()
+ * or in some other way.
+ */
+gboolean g_get_charset (const char **charset);
 
 /* These are all analogs of the <ctype.h> functions.
  */
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isalnum   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isalpha   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_iscntrl   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isdigit   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isgraph   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_islower   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isprint   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_ispunct   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isspace   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isupper   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isxdigit  (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_istitle   (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_isdefined (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_iswide    (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_iswide_cjk(gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_iszerowidth(gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_ismark    (gunichar c) G_GNUC_CONST;
 
 /* More <ctype.h> functions.  These convert between the three cases.
  * See the Unicode book to understand title case.  */
-GLIB_AVAILABLE_IN_ALL
 gunichar g_unichar_toupper (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gunichar g_unichar_tolower (gunichar c) G_GNUC_CONST;
-GLIB_AVAILABLE_IN_ALL
 gunichar g_unichar_totitle (gunichar c) G_GNUC_CONST;
 
-/* If C is a digit (according to 'g_unichar_isdigit'), then return its
+/* If C is a digit (according to `g_unichar_isdigit'), then return its
    numeric value.  Otherwise return -1.  */
-GLIB_AVAILABLE_IN_ALL
 gint g_unichar_digit_value (gunichar c) G_GNUC_CONST;
 
-GLIB_AVAILABLE_IN_ALL
 gint g_unichar_xdigit_value (gunichar c) G_GNUC_CONST;
 
 /* Return the Unicode character type of a given character.  */
-GLIB_AVAILABLE_IN_ALL
 GUnicodeType g_unichar_type (gunichar c) G_GNUC_CONST;
 
 /* Return the line break property for a given character */
-GLIB_AVAILABLE_IN_ALL
 GUnicodeBreakType g_unichar_break_type (gunichar c) G_GNUC_CONST;
 
 /* Returns the combining class for a given character */
-GLIB_AVAILABLE_IN_ALL
 gint g_unichar_combining_class (gunichar uc) G_GNUC_CONST;
 
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_get_mirror_char (gunichar ch,
                                     gunichar *mirrored_ch);
 
-GLIB_AVAILABLE_IN_ALL
 GUnicodeScript g_unichar_get_script (gunichar ch) G_GNUC_CONST;
 
 /* Validate a Unicode character */
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_validate (gunichar ch) G_GNUC_CONST;
 
 /* Pairwise canonical compose/decompose */
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_compose (gunichar  a,
                             gunichar  b,
                             gunichar *ch);
-GLIB_AVAILABLE_IN_ALL
 gboolean g_unichar_decompose (gunichar  ch,
                               gunichar *a,
                               gunichar *b);
 
-GLIB_AVAILABLE_IN_ALL
 gsize g_unichar_fully_decompose (gunichar  ch,
                                  gboolean  compat,
                                  gunichar *result,
                                  gsize     result_len);
 
-/**
- * G_UNICHAR_MAX_DECOMPOSITION_LENGTH:
- *
- * The maximum length (in codepoints) of a compatibility or canonical
- * decomposition of a single Unicode character.
- *
- * This is as defined by Unicode 6.1.
- *
- * Since: 2.32
- */
-#define G_UNICHAR_MAX_DECOMPOSITION_LENGTH 18 /* codepoints */
-
 /* Compute canonical ordering of a string in-place.  This rearranges
    decomposed characters in the string according to their combining
    classes.  See the Unicode manual for more information.  */
-GLIB_AVAILABLE_IN_ALL
 void g_unicode_canonical_ordering (gunichar *string,
                                    gsize     len);
 
 
-GLIB_DEPRECATED_IN_2_30
+#ifndef G_DISABLE_DEPRECATED
+/* Deprecated.  Use g_unichar_fully_decompose() */
 gunichar *g_unicode_canonical_decomposition (gunichar  ch,
                                              gsize    *result_len) G_GNUC_MALLOC;
+#endif
 
 /* Array of skip-bytes-per-initial character.
  */
@@ -794,134 +580,96 @@ GLIB_VAR const gchar * const g_utf8_skip;
  * g_utf8_next_char:
  * @p: Pointer to the start of a valid UTF-8 character
  *
- * Skips to the next character in a UTF-8 string.
- *
- * The string must be valid; this macro is as fast as possible, and has
- * no error-checking.
- *
- * You would use this macro to iterate over a string character by character.
- *
- * The macro returns the start of the next UTF-8 character.
- *
+ * Skips to the next character in a UTF-8 string. The string must be
+ * valid; this macro is as fast as possible, and has no error-checking.
+ * You would use this macro to iterate over a string character by
+ * character. The macro returns the start of the next UTF-8 character.
  * Before using this macro, use g_utf8_validate() to validate strings
  * that may contain invalid UTF-8.
  */
-#define g_utf8_next_char(p) ((p) + g_utf8_skip[*(const guchar *)(p)])
+#define g_utf8_next_char(p) (char *)((p) + g_utf8_skip[*(const guchar *)(p)])
 
-GLIB_AVAILABLE_IN_ALL
 gunichar g_utf8_get_char           (const gchar  *p) G_GNUC_PURE;
-GLIB_AVAILABLE_IN_ALL
 gunichar g_utf8_get_char_validated (const  gchar *p,
                                     gssize        max_len) G_GNUC_PURE;
 
-GLIB_AVAILABLE_IN_ALL
 gchar*   g_utf8_offset_to_pointer (const gchar *str,
                                    glong        offset) G_GNUC_PURE;
-GLIB_AVAILABLE_IN_ALL
 glong    g_utf8_pointer_to_offset (const gchar *str,
                                    const gchar *pos) G_GNUC_PURE;
-GLIB_AVAILABLE_IN_ALL
 gchar*   g_utf8_prev_char         (const gchar *p) G_GNUC_PURE;
-GLIB_AVAILABLE_IN_ALL
 gchar*   g_utf8_find_next_char    (const gchar *p,
                                    const gchar *end) G_GNUC_PURE;
-GLIB_AVAILABLE_IN_ALL
 gchar*   g_utf8_find_prev_char    (const gchar *str,
                                    const gchar *p) G_GNUC_PURE;
 
-GLIB_AVAILABLE_IN_ALL
 glong    g_utf8_strlen            (const gchar *p,
                                    gssize       max) G_GNUC_PURE;
 
-GLIB_AVAILABLE_IN_2_30
 gchar   *g_utf8_substring         (const gchar *str,
                                    glong        start_pos,
                                    glong        end_pos) G_GNUC_MALLOC;
 
-GLIB_AVAILABLE_IN_ALL
 gchar   *g_utf8_strncpy           (gchar       *dest,
                                    const gchar *src,
                                    gsize        n);
 
-GLIB_AVAILABLE_IN_2_78
-gchar   *g_utf8_truncate_middle   (const gchar *string,
-                                   gsize        truncate_length);
-
 /* Find the UTF-8 character corresponding to ch, in string p. These
    functions are equivalants to strchr and strrchr */
-GLIB_AVAILABLE_IN_ALL
 gchar* g_utf8_strchr  (const gchar *p,
                        gssize       len,
                        gunichar     c);
-GLIB_AVAILABLE_IN_ALL
 gchar* g_utf8_strrchr (const gchar *p,
                        gssize       len,
                        gunichar     c);
-GLIB_AVAILABLE_IN_ALL
 gchar* g_utf8_strreverse (const gchar *str,
                           gssize len);
 
-GLIB_AVAILABLE_IN_ALL
 gunichar2 *g_utf8_to_utf16     (const gchar      *str,
                                 glong             len,
                                 glong            *items_read,
                                 glong            *items_written,
                                 GError          **error) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gunichar * g_utf8_to_ucs4      (const gchar      *str,
                                 glong             len,
                                 glong            *items_read,
                                 glong            *items_written,
                                 GError          **error) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gunichar * g_utf8_to_ucs4_fast (const gchar      *str,
                                 glong             len,
                                 glong            *items_written) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gunichar * g_utf16_to_ucs4     (const gunichar2  *str,
                                 glong             len,
                                 glong            *items_read,
                                 glong            *items_written,
                                 GError          **error) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gchar*     g_utf16_to_utf8     (const gunichar2  *str,
                                 glong             len,
                                 glong            *items_read,
                                 glong            *items_written,
                                 GError          **error) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gunichar2 *g_ucs4_to_utf16     (const gunichar   *str,
                                 glong             len,
                                 glong            *items_read,
                                 glong            *items_written,
                                 GError          **error) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gchar*     g_ucs4_to_utf8      (const gunichar   *str,
                                 glong             len,
                                 glong            *items_read,
                                 glong            *items_written,
                                 GError          **error) G_GNUC_MALLOC;
 
-GLIB_AVAILABLE_IN_ALL
 gint      g_unichar_to_utf8 (gunichar    c,
                              gchar      *outbuf);
 
-GLIB_AVAILABLE_IN_ALL
 gboolean g_utf8_validate (const gchar  *str,
                           gssize        max_len,
                           const gchar **end);
-GLIB_AVAILABLE_IN_2_60
-gboolean g_utf8_validate_len (const gchar  *str,
-                              gsize         max_len,
-                              const gchar **end);
 
-GLIB_AVAILABLE_IN_ALL
 gchar *g_utf8_strup   (const gchar *str,
                        gssize       len) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gchar *g_utf8_strdown (const gchar *str,
                        gssize       len) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gchar *g_utf8_casefold (const gchar *str,
                         gssize       len) G_GNUC_MALLOC;
 
@@ -960,24 +708,21 @@ typedef enum {
   G_NORMALIZE_NFKC = G_NORMALIZE_ALL_COMPOSE
 } GNormalizeMode;
 
-GLIB_AVAILABLE_IN_ALL
 gchar *g_utf8_normalize (const gchar   *str,
                          gssize         len,
                          GNormalizeMode mode) G_GNUC_MALLOC;
 
-GLIB_AVAILABLE_IN_ALL
 gint   g_utf8_collate     (const gchar *str1,
                            const gchar *str2) G_GNUC_PURE;
-GLIB_AVAILABLE_IN_ALL
 gchar *g_utf8_collate_key (const gchar *str,
                            gssize       len) G_GNUC_MALLOC;
-GLIB_AVAILABLE_IN_ALL
 gchar *g_utf8_collate_key_for_filename (const gchar *str,
                                         gssize       len) G_GNUC_MALLOC;
 
-GLIB_AVAILABLE_IN_2_52
-gchar *g_utf8_make_valid (const gchar *str,
-                          gssize       len) G_GNUC_MALLOC;
+
+/* private */
+
+gchar *_g_utf8_make_valid (const gchar *name);
 
 G_END_DECLS
 
