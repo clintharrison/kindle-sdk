@@ -110,7 +110,7 @@ Setup_SDK() {
         fi
         LOWER_DIRS="./cache/${tc_target}/firmware_${i}/mnt:$LOWER_DIRS"
     done
-    sudo mount -t overlay ovelay -o lowerdir=${LOWER_DIRS} ./cache/${tc_target}/firmware/mnt
+    sudo mount -t overlay overlay -o lowerdir=${LOWER_DIRS} ./cache/${tc_target}/firmware/mnt
 
 
     echo "[*] Wiping target pkgconfig files"
