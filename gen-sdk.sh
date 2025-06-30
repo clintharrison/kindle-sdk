@@ -11,13 +11,13 @@ RM_If_Exists() {
 Setup_SDK() {
     tc_target="$1"
     sdk_target="$2"
-    FIRM_URL="$3"
+    FIRM_URLS=("${@:3}")
     tc_dir="$HOME/x-tools/$tc_target"
     sysroot_dir="$tc_dir/$tc_target/sysroot"
 
     # Just in case
     set +e
-    sudo umount "./cache/${tc_target}/firmware/mnt"
+    sudo umount ./cache/${tc_target}/firmware*/mnt
     set -e
     
     case $sdk_target in
@@ -67,30 +67,51 @@ Setup_SDK() {
     echo "arch = '$arch'" >> $tc_dir/meson-crosscompile.txt
     chmod -f a-w $tc_dir/meson-crosscompile.txt
 
-    echo "[*] Downloading Kindle firmware"
-
-    if ! [ -d "./cache/${tc_target}" ]; then
-        mkdir -p ./cache/${tc_target}
-    fi
-    echo "Downloading from: ${FIRM_URL}"
-    curl --progress-bar -L -C - -o "./cache/${tc_target}/firmware.bin" "${FIRM_URL}"
-
     echo "[*] Building Latest KindleTool"
     cd KindleTool/
         make
     cd ..
 
-    echo "[*] Extracting firmware"
-    if [ -d "./cache/${tc_target}/firmware/" ]; then
-        sudo rm -rf "./cache/${tc_target}/firmware/"
+    echo "[*] Downloading Kindle firmware"
+
+    if ! [ -d "./cache/${tc_target}" ]; then
+        mkdir -p ./cache/${tc_target}
     fi
 
-    KindleTool/KindleTool/Release/kindletool extract "./cache/${tc_target}/firmware.bin" "./cache/${tc_target}/firmware/"
-    cd "./cache/${tc_target}/firmware/"
-        gunzip rootfs.img.gz
-        mkdir mnt
-        sudo mount -o loop rootfs.img mnt
-    cd ../../..
+
+    for i in "${!FIRM_URLS[@]}"; do
+        echo "Downloading from: ${FIRM_URLS[i]}"
+        if command -v aria2c >/dev/null 2>&1
+        then
+            aria2c -s 16 -x 16 -k 2M "${FIRM_URLS[i]}" -o "./cache/${tc_target}/firmware_${i}.bin"
+        else
+            curl --progress-bar -L -C - -o "./cache/${tc_target}/firmware_${i}.bin" "${FIRM_URLS[i]}"
+        fi
+
+        echo "[*] Extracting firmware #$((i+1))"
+        if [ -d "./cache/${tc_target}/firmware_${i}/" ]; then
+            sudo rm -rf "./cache/${tc_target}/firmware_${i}/"
+        fi
+
+        KindleTool/KindleTool/Release/kindletool extract "./cache/${tc_target}/firmware_${i}.bin" "./cache/${tc_target}/firmware_${i}/"
+        cd "./cache/${tc_target}/firmware_${i}/"
+            gunzip rootfs.img.gz
+            mkdir mnt
+            sudo mount -o loop rootfs.img mnt
+        cd ../../..
+    done
+
+    echo "[*] Overlaying firmwares"
+    mkdir -p ./cache/${tc_target}/firmware/mnt # we overlay mount all of our firmware images here
+    LOWER_DIRS="./cache/${tc_target}/firmware_0/mnt"
+    for i in "${!FIRM_URLS[@]}"; do
+        if [[ $i -eq 0 ]]; then
+            continue  # Skip first element
+        fi
+        LOWER_DIRS="./cache/${tc_target}/firmware_${i}/mnt:$LOWER_DIRS"
+    done
+    sudo mount -t overlay ovelay -o lowerdir=${LOWER_DIRS} ./cache/${tc_target}/firmware/mnt
+
 
     echo "[*] Wiping target pkgconfig files"
     if [ -d "$sysroot_dir/usr/lib/pkgconfig" ]; then
@@ -170,10 +191,10 @@ Setup_SDK() {
     echo "[*] Copying firmware library files to sysroot"
     chmod -f -R a+w $sysroot_dir/lib
     chmod -f -R a+w $sysroot_dir/usr/lib
-    sudo chown -R $USER: ./cache/${tc_target}/firmware/mnt/usr/lib/*
-    sudo chown -R $USER: ./cache/${tc_target}/firmware/mnt/lib/*
     cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/usr/lib/* $sysroot_dir/usr/lib/
     cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/lib/* $sysroot_dir/lib/
+    sudo chown -R $USER: ${sysroot_dir}/usr/lib/*
+    sudo chown -R $USER: ${sysroot_dir}/lib/*
     chmod -f -R a-w $sysroot_dir/usr/lib
     chmod -f -R a-w $sysroot_dir/lib
 
@@ -182,9 +203,7 @@ Setup_SDK() {
 
 
     echo "[*] Cleaning up"
-    cd "./cache/${tc_target}/firmware/"
-        sudo umount mnt
-    cd ../../..
+    sudo umount ./cache/${tc_target}/firmware*/mnt
 
     echo "===================================================================================================="
     echo "[*] Kindle (unofficial) SDK Installed"
@@ -219,7 +238,7 @@ case $1 in
 		exit 0
 		;;
 	kindlehf)
-		Setup_SDK "arm-kindlehf-linux-gnueabihf" "kindlehf" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.16.3.bin"
+		Setup_SDK "arm-kindlehf-linux-gnueabihf" "kindlehf" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.16.3.bin" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_scribe_5.16.3.bin"
 		;;
     kindlepw4)
         Setup_SDK "arm-kindlepw4-linux-gnueabi" "kindlepw2" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.10.1.2.bin"
