@@ -14,7 +14,7 @@ Setup_SDK() {
     FIRM_URLS=("${@:3}")
     if [[ -z $tc_dir ]]; then
         tc_dir="$HOME/x-tools/$tc_target"
-
+    fi
     sysroot_dir="$tc_dir/$tc_target/sysroot"
 
     # Just in case
