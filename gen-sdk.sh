@@ -94,16 +94,20 @@ Setup_SDK() {
         if [ -d "./cache/${tc_target}/firmware_${i}/" ]; then
             sudo rm -rf "./cache/${tc_target}/firmware_${i}/"
         fi
-
-        KindleTool/KindleTool/Release/kindletool extract "./cache/${tc_target}/firmware_${i}.bin" "./cache/${tc_target}/firmware_${i}/"
-        cd "./cache/${tc_target}/firmware_${i}/"
-            gunzip rootfs.img.gz
-            mkdir mnt
-            sudo mount -o loop rootfs.img mnt
-        cd ../../..
       else
-        echo "Found firmware in cache - SKIPPING!"
+        echo "Found firmware in cache - SKIPPING DOWNLOAD!"
       fi
+
+      KindleTool/KindleTool/Release/kindletool extract "./cache/${tc_target}/firmware_${i}.bin" "./cache/${tc_target}/firmware_${i}/"
+      cd "./cache/${tc_target}/firmware_${i}/"
+          if [ -f rootfs.img ]; then
+            rm rootfs.img
+          fi
+
+          gunzip rootfs.img.gz
+          mkdir -p mnt
+          sudo mount -o loop rootfs.img mnt
+      cd ../../..
     done
 
     echo "[*] Overlaying firmwares"
@@ -115,8 +119,7 @@ Setup_SDK() {
         fi
         LOWER_DIRS="./cache/${tc_target}/firmware_${i}/mnt:$LOWER_DIRS"
     done
-    sudo mount -t overlay overlay -o lowerdir=${LOWER_DIRS} ./cache/${tc_target}/firmware/mnt
-
+    sudo mount -t overlay overlay -o lowerdir=./cache/${tc_target}/firmware/mnt:${LOWER_DIRS} ./cache/${tc_target}/firmware/mnt
 
     echo "[*] Wiping target pkgconfig files"
     if [ -d "$sysroot_dir/usr/lib/pkgconfig" ]; then
