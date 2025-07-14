@@ -189,9 +189,10 @@ Setup_SDK() {
     # OVERLAY MOUNTS CAN BITE ME!
     for i in "${!FIRM_URLS[@]}"; do
         echo "  - Copying firmware ${i}"
-        chmod -f -R a+r ./cache/${tc_target}/firmware_${i}/mnt
+        set +e
         cp -rn --remove-destination ./cache/${tc_target}/firmware_${i}/mnt/usr/lib/* $sysroot_dir/usr/lib/
         cp -rn --remove-destination ./cache/${tc_target}/firmware_${i}/mnt/lib/* $sysroot_dir/lib/
+        set -e
     done
     sudo chown -R $USER: ${sysroot_dir}/usr/lib/*
     sudo chown -R $USER: ${sysroot_dir}/lib/*
