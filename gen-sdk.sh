@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e # Stop on error
 
@@ -11,7 +11,7 @@ RM_If_Exists() {
 Setup_SDK() {
     tc_target="$1"
     sdk_target="$2"
-    read -ra FIRM_URLS <<< "${@:3}"
+    FIRM_URLS=("${@:3}")
     if [[ -z $tc_dir ]]; then
         tc_dir="$HOME/x-tools/$tc_target"
     fi
