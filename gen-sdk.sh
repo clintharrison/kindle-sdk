@@ -32,7 +32,7 @@ Setup_SDK() {
     esac
 
     if ! [ -d $tc_dir ]; then
-        echo "[ERROR ] Toolchain not installed - Please setup koxtoolchain for target $tc_target"
+        echo "[ERROR] Toolchain not installed - Please setup koxtoolchain for target $tc_target"
         exit 1
     fi
 
@@ -110,17 +110,6 @@ Setup_SDK() {
       cd ../../..
     done
 
-    echo "[*] Overlaying firmwares"
-    mkdir -p ./cache/${tc_target}/firmware/mnt # we overlay mount all of our firmware images here
-    LOWER_DIRS="./cache/${tc_target}/firmware_0/mnt"
-    for i in "${!FIRM_URLS[@]}"; do
-        if [[ $i -eq 0 ]]; then
-            continue  # Skip first element
-        fi
-        LOWER_DIRS="./cache/${tc_target}/firmware_${i}/mnt:$LOWER_DIRS"
-    done
-    sudo mount -t overlay overlay -o lowerdir=./cache/${tc_target}/firmware/mnt:${LOWER_DIRS} ./cache/${tc_target}/firmware/mnt
-
     echo "[*] Wiping target pkgconfig files"
     if [ -d "$sysroot_dir/usr/lib/pkgconfig" ]; then
         chmod -f a+w $sysroot_dir/usr/lib/
@@ -192,15 +181,17 @@ Setup_SDK() {
     fi
 
 
-    echo "[*] Overwriting mounted firmware permissions"
-    chmod -f -R a+r ./cache/${tc_target}/firmware/mnt/
-
-
     echo "[*] Copying firmware library files to sysroot"
     chmod -f -R a+w $sysroot_dir/lib
     chmod -f -R a+w $sysroot_dir/usr/lib
-    cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/usr/lib/* $sysroot_dir/usr/lib/
-    cp -rn --remove-destination ./cache/${tc_target}/firmware/mnt/lib/* $sysroot_dir/lib/
+
+    # We overlay by copying and skipping files that already exist (-n isn't portable GOOGOO GAGA IT'S MORE PORTABLE THAN BLOODY OVERLAY MOUNTS (sorry im supposed to be writing DRM today not dealing with Kindle stuff))
+    # OVERLAY MOUNTS CAN BITE ME!
+    for i in "${!FIRM_URLS[@]}"; do
+        echo "  - Copying firmware ${i}"
+        cp -rn --remove-destination ./cache/${tc_target}/firmware_${i}/mnt/usr/lib/* $sysroot_dir/usr/lib/
+        cp -rn --remove-destination ./cache/${tc_target}/firmware_${i}/mnt/lib/* $sysroot_dir/lib/
+    done
     sudo chown -R $USER: ${sysroot_dir}/usr/lib/*
     sudo chown -R $USER: ${sysroot_dir}/lib/*
     echo "[*] Patching symlinks"
