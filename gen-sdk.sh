@@ -192,6 +192,8 @@ Setup_SDK() {
     fi
 
 
+    echo "[*] Overwriting mounted firmware permissions"
+    chmod -f -R a+rw ./cache/${tc_target}/firmware/mnt/
 
 
     echo "[*] Copying firmware library files to sysroot"
