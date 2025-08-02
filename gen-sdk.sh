@@ -243,16 +243,16 @@ usage: $0 <platform> [path]
 
 Supported platforms:
 
-	kindlepw2
-	kindlehf
+    kindlepw2
+    kindlehf
 
 If used, [path] should point to your installed toolchain, ie: '~/x-tools/arm-kindlehf-linux-gnueabihf'
 "
 
 if [ $# -lt 1 ]; then
-	echo "Missing argument"
-	echo "${HELP_MSG}"
-	exit 1
+    echo "Missing argument"
+    echo "${HELP_MSG}"
+    exit 1
 fi
 
 if [ $# -gt 1 ]; then
@@ -260,23 +260,23 @@ if [ $# -gt 1 ]; then
 fi
 
 case $1 in
-	-h)
-		echo "${HELP_MSG}"
-		exit 0
-		;;
-	kindlehf)
-		Setup_SDK "arm-kindlehf-linux-gnueabihf" "kindlehf" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.16.3.bin" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_scribe_5.16.3.bin"
-		;;
+    -h)
+        echo "${HELP_MSG}"
+        exit 0
+        ;;
+    kindlehf)
+        Setup_SDK "arm-kindlehf-linux-gnueabihf" "kindlehf" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.16.3.bin" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_scribe_5.16.3.bin"
+        ;;
     kindlepw4)
         Setup_SDK "arm-kindlepw4-linux-gnueabi" "kindlepw2" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.10.1.2.bin"
-		Setup_SDK "arm-kindlepw4-linux-gnueabi" "kindlepw4" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.10.1.2.bin"
-		;;
-	kindlepw2)
-		Setup_SDK "arm-kindlepw2-linux-gnueabi" "kindlepw2" "https://s3.amazonaws.com/G7G_FirmwareUpdates_WebDownloads/update_kindle_5.4.2.bin"
-		;;
-	*)
-		echo "[!] $1 not supported!"
-		echo "${HELP_MSG}"
-		exit 1
-		;;
+        Setup_SDK "arm-kindlepw4-linux-gnueabi" "kindlepw4" "https://s3.amazonaws.com/firmwaredownloads/update_kindle_all_new_paperwhite_v2_5.10.1.2.bin"
+        ;;
+    kindlepw2)
+        Setup_SDK "arm-kindlepw2-linux-gnueabi" "kindlepw2" "https://s3.amazonaws.com/G7G_FirmwareUpdates_WebDownloads/update_kindle_5.4.2.bin"
+        ;;
+    *)
+        echo "[!] $1 not supported!"
+        echo "${HELP_MSG}"
+        exit 1
+        ;;
 esac
