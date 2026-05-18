@@ -1,0 +1,10 @@
+prefix=/usr
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: cairo-xlib
+Description: Cairo Xlib surface backend (built into cairo)
+Version: 1.18.2
+Requires: cairo x11
+Libs: -L${libdir} -lcairo
+Cflags: -I${includedir}/cairo
