@@ -1,0 +1,10 @@
+prefix=/usr
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: Xi
+Description: X Input extension library
+Version: 1.7.10
+Requires: x11 xext
+Libs: -L${libdir} -lXi
+Cflags: -I${includedir}
